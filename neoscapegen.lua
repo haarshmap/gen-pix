@@ -130,6 +130,21 @@ for iy = 0, windowsInColumn, 1 do
   end
 end
 
+-- generating lights and roads
+function genRoads(roadPositionY, roadThickness, roadColour)
+  app.useTool {
+    tool = "filled_rectangle",
+    color = roadColour,
+    brush = brush1,
+    points = {
+      Point(0, roadPositionY),
+      Point(canvasWidth, roadPositionY + roadThickness)
+    },
+    cel = cel,
+    layer = layer
+  }
+end
+
 local featureTable = {
   "Box",
   "Dome",
@@ -138,7 +153,7 @@ local featureTable = {
 }
 local chosenFeature = featureTable[math.random(#featureTable)]
 
-function genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour, windowWidth, windowHeight, windowColour1, windowColour2, chosenFeature)
+function genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour, windowWidth, windowHeight, windowColour1, windowColour2, chosenFeature, roadPositionY, roadThickness, roadColour)
 
   -- Building creation loop
   local i
@@ -254,22 +269,10 @@ function genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingCol
     windowWidthCurrent = math.random(windowWidth - 1, windowWidth + 1)
     windowHeightCurrent = math.random(windowHeight - 1, windowHeight + 1)
     genWindows(buildingStartX, buildingEndX, buildingStartY, buildingEndY, windowWidthCurrent, windowHeightCurrent, windowColour1, windowColour2)
-  end
-end
 
--- generating lights and roads
-function genRoads(roadPositionY, roadThickness, roadColour)
-  app.useTool {
-    tool = "fill_rectangle",
-    colour = roadColour,
-    brush = brush1,
-    points = {
-      Point(0, roadPositionY),
-      Point(canvasWidth, roadPositonY + roadThickness)
-    },
-    cel = cel,
-    layer = layer
-  }
+    -- Roads
+    genRoads(roadPositionY, roadThickness, roadColour)
+  end
 end
 
 -- buildings 1
@@ -280,6 +283,7 @@ local buildingWidth = canvasWidth / 10
 local buildingHeight = canvasHeight - (canvasHeight * 0.65)
 local buildingColour1 = Color{ h=baseHue - math.random(5, 10), s=baseSat + (math.random(5, 10)/100), v=baseVal - (math.random(6, 10)/100), a=255 }
 
+-- windows 1
 local windowWidth = 2
 local windowHeight = 4
 local windowColour1a = baseColour
@@ -290,8 +294,15 @@ windowHeightCurrent = math.random(windowHeight - 1, windowHeight + 1)
 local windowsInRow = (buildingWidth - 2) / windowWidth
 local windowsInColumn = (buildingHeight - 2) / windowHeight
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour1, windowWidth, windowHeight, windowColour1a, windowColour1b, chosenFeature)
+-- roads 1
+local roadPositionMin = canvasHeight * 0.40
+local roadPositionMax = canvasHeight * 0.45
 
+local roadThickness = 2
+local roadColour1 = buildingColour1
+local roadPositionY1 = math.random(roadPositionMin, roadPositionMax)
+
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour1, windowWidth, windowHeight, windowColour1a, windowColour1b, chosenFeature, roadPositionY1, roadThickness, roadColour1)
 
 -- buildings 2
 local buildingsLayer2 = sprite:newLayer()
@@ -304,12 +315,21 @@ local buildingWidth = canvasWidth/9
 local buildingHeight = canvasHeight - (canvasHeight * 0.60)
 local buildingStartX = 0
 local buildingColour2 = Color{ h=baseHue - math.random(30, 40), s=baseSat + (math.random(5, 10)/100), v=baseVal - (math.random(35, 50)/100), a=255 }
+
+-- windows 2
 local windowWidth = 3
 local windowHeight = 5
 local windowColour2a = baseColour
 local windowColour2b = buildingColour1
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour2, windowWidth, windowHeight, windowColour2a, windowColour2b, chosenFeature)
+-- roads 2
+local roadPositionMin = canvasHeight * 0.45
+local roadPositionMax = canvasHeight * 0.55
+local roadThickness = 2
+local roadColour2 = buildingColour2
+local roadPositionY2 = math.random(roadPositionMin, roadPositionMax)
+
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour2, windowWidth, windowHeight, windowColour2a, windowColour2b, chosenFeature, roadPositionY2, roadThickness, roadColour2)
 
 -- buildings 3
 local buildingsLayer3 = sprite:newLayer()
@@ -317,17 +337,28 @@ buildingsLayer3.name = "buildings, 3"
 local cel = sprite:newCel(buildingsLayer3, 1)
 local layer = buildingsLayer3
 
--- Set building and window parameters
+-- building params
 local buildingWidth = canvasWidth/9
 local buildingHeight = canvasHeight - (canvasHeight * 0.50)
 local buildingStartX = 0
 local buildingColour3 = Color{ h=baseHue - math.random(50, 60), s=baseSat + (math.random(5, 10)/100), v=baseVal - (math.random(50, 60)/100), a=255 }
+
+-- windows 3
 local windowWidth = 3
 local windowHeight = 5
 local windowColour3a = baseColour
 local windowColour3b = buildingColour1
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour3, windowWidth, windowHeight, windowColour3a, windowColour3b, chosenFeature)
+-- roads 3
+
+local roadPositionMin = canvasHeight * 0.60
+local roadPositionMax = canvasHeight * 0.65
+
+local roadThickness = 2
+local roadColour3 = buildingColour3
+local roadPositionY3 = math.random(roadPositionMin, roadPositionMax)
+
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour3, windowWidth, windowHeight, windowColour3a, windowColour3b, chosenFeature, roadPositionY3, roadThickness, roadColour3)
 
 -- buildings 4
 local buildingsLayer4 = sprite:newLayer()
@@ -335,14 +366,25 @@ buildingsLayer4.name = "buildings, 4"
 local cel = sprite:newCel(buildingsLayer4, 1)
 local layer = buildingsLayer4
 
--- Set building and window parameters
-local buildingWidth = canvasWidth/9
+-- building params
+local buildingWidth = canvasWidth/7
 local buildingHeight = canvasHeight - (canvasHeight * 0.45)
 local buildingStartX = 0
 local buildingColour4 = Color{ h = baseHue - math.random(50, 70), s=baseSat + (math.random(5, 10)/100), v=baseVal - (math.random(70, 80)/100), a=255 }
+
+-- windows 4
 local windowWidth = 3
 local windowHeight = 5
 local windowColour4a = baseColour
 local windowColour4b = buildingColour1
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour4, windowWidth, windowHeight, windowColour4a, windowColour4b, chosenFeature)
+-- roads 4
+
+local roadPositionMin = canvasHeight * 0.75
+local roadPositionMax = canvasHeight * 0.85
+
+local roadThickness = 2
+local roadColour4 = buildingColour4
+local roadPositionY4 = math.random(roadPositionMin, roadPositionMax)
+
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour4, windowWidth, windowHeight, windowColour4a, windowColour4b, chosenFeature, roadPositionY3, roadThickness, roadColour4)
