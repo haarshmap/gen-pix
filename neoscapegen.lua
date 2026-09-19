@@ -140,9 +140,41 @@ function genRoads(roadPositionY, roadThickness, roadColour)
       Point(0, roadPositionY),
       Point(canvasWidth, roadPositionY + roadThickness)
     },
+
     cel = cel,
     layer = layer
   }
+    local numberOfStruts = canvasWidth/roadThickness
+    local strutWidth = (roadThickness/3) * 2
+    local strutInterval = strutWidth * 5
+
+    local i
+    for i = 0, numberOfStruts, 1 do
+      strutPosition = i * strutInterval + (i * strutWidth)
+
+      app.useTool {
+        tool = "filled_rectangle",
+        brush = brush1,
+        color = roadColour,
+        points = {
+          Point(strutPosition, roadPositionY),
+          Point(strutPosition + strutWidth, canvasHeight)
+        },
+        cel = cel,
+        layer = layer
+      }
+    end
+
+  app.useTool {
+    tool = "line",
+    color = roadColour,
+    brush = brush1,
+    points = {
+      Point(strutPosition - 4, roadPositionY + roadThickness + 1),
+      Point(strutPosition + strutWidth + 4, roadPositionY + roadThickness + 1)
+    }
+  }
+
 end
 
 local featureTable = {
@@ -354,7 +386,7 @@ local windowColour3b = buildingColour1
 local roadPositionMin = canvasHeight * 0.60
 local roadPositionMax = canvasHeight * 0.65
 
-local roadThickness = 2
+local roadThickness = 5
 local roadColour3 = buildingColour3
 local roadPositionY3 = math.random(roadPositionMin, roadPositionMax)
 
@@ -383,8 +415,37 @@ local windowColour4b = buildingColour1
 local roadPositionMin = canvasHeight * 0.75
 local roadPositionMax = canvasHeight * 0.85
 
-local roadThickness = 2
+local roadThickness = 7
 local roadColour4 = buildingColour4
 local roadPositionY4 = math.random(roadPositionMin, roadPositionMax)
 
 genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour4, windowWidth, windowHeight, windowColour4a, windowColour4b, chosenFeature, roadPositionY3, roadThickness, roadColour4)
+
+-- water layer
+local waterLayer = sprite:newLayer()
+waterLayer.name = "water"
+local cel = sprite:newCel(waterLayer, 1)
+
+app.useTool {
+  tool = "filled_rectangle",
+  color = buildingColour4,
+  brush = brush1,
+  points = {
+    Point(0, canvasHeight * 0.75),
+    Point(canvasWidth, canvasHeight)
+  },
+  cel = cel,
+  layer = waterLayer
+}
+
+app.useTool {
+  tool = "line",
+  color = baseColour,
+  brush = brush1,
+  points = {
+    Point(0, canvasHeight * 0.76),
+    Point(canvasWidth, canvasHeight * 0.76)
+  },
+  cel = cel,
+  layer = waterLayer
+}
