@@ -172,8 +172,53 @@ function genRoads(roadPositionY, roadThickness, roadColour)
     points = {
       Point(strutPosition - 4, roadPositionY + roadThickness + 1),
       Point(strutPosition + strutWidth + 4, roadPositionY + roadThickness + 1)
+      },
     }
-  }
+
+    -- adding street lamps
+    local numberOfLamps = canvasWidth/4
+    local lampWidth = 1
+    local lampHeight = 8
+    local lampInterval = 24
+    local lampStart = math.random(-10, 10)
+
+    local i
+    for i = 0, numberOfLamps, 1 do
+      local lampPosition = lampStart + i * lampInterval + (i * lampWidth)
+
+      app.useTool {
+        tool = "filled_rectangle",
+        brush = brush1,
+        color = roadColour,
+        points = {
+          Point(lampPosition, roadPositionY - lampHeight),
+          Point(lampPosition + lampWidth - 1, roadPositionY)
+        },
+        cel = cel,
+        layer = layer
+      }
+      app.useTool {
+        tool = "filled_rectangle",
+        brush = brush1,
+        color = roadColour,
+        points = {
+          Point(lampPosition, roadPositionY - lampHeight),
+          Point(lampPosition + lampWidth + 1, roadPositionY - lampHeight + 1)
+        },
+        cel = cel,
+        layer = layer
+      }
+      app.useTool {
+        tool = "pencil",
+        color = Color{ h=45, s=0.1, v=1, a=255 },
+        brush = brush2,
+        points = { Point(lampPosition + 3, roadPositionY - lampHeight + 2)},
+        cel = cel,
+        layer = layer
+      }
+
+    end
+
 
 end
 
