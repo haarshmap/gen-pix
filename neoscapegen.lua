@@ -185,7 +185,7 @@ local featureTable = {
 }
 local chosenFeature = featureTable[math.random(#featureTable)]
 
-function genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour, windowWidth, windowHeight, windowColour1, windowColour2, chosenFeature, roadPositionY, roadThickness, roadColour)
+function genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour, windowWidth, windowHeight, windowColour1, windowColour2, chosenFeature)
 
   -- Building creation loop
   local i
@@ -302,8 +302,6 @@ function genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingCol
     windowHeightCurrent = math.random(windowHeight - 1, windowHeight + 1)
     genWindows(buildingStartX, buildingEndX, buildingStartY, buildingEndY, windowWidthCurrent, windowHeightCurrent, windowColour1, windowColour2)
 
-    -- Roads
-    genRoads(roadPositionY, roadThickness, roadColour)
   end
 end
 
@@ -334,7 +332,13 @@ local roadThickness = 2
 local roadColour1 = buildingColour1
 local roadPositionY1 = math.random(roadPositionMin, roadPositionMax)
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour1, windowWidth, windowHeight, windowColour1a, windowColour1b, chosenFeature, roadPositionY1, roadThickness, roadColour1)
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour1, windowWidth, windowHeight, windowColour1a, windowColour1b, chosenFeature)
+
+local roadsBackgroundLayer1 = sprite:newLayer()
+roadsBackgroundLayer1.name = "roads, 1"
+local cel = sprite:newCel(roadsBackgroundLayer1, 1)
+
+genRoads(roadPositionY1, roadThickness, roadColour1)
 
 -- buildings 2
 local buildingsLayer2 = sprite:newLayer()
@@ -361,7 +365,13 @@ local roadThickness = 2
 local roadColour2 = buildingColour2
 local roadPositionY2 = math.random(roadPositionMin, roadPositionMax)
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour2, windowWidth, windowHeight, windowColour2a, windowColour2b, chosenFeature, roadPositionY2, roadThickness, roadColour2)
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour2, windowWidth, windowHeight, windowColour2a, windowColour2b, chosenFeature)
+
+local roadsBackgroundLayer2 = sprite:newLayer()
+roadsBackgroundLayer2.name = "roads, 2"
+local cel = sprite:newCel(roadsBackgroundLayer2, 1)
+
+genRoads(roadPositionY2, roadThickness, roadColour2)
 
 -- buildings 3
 local buildingsLayer3 = sprite:newLayer()
@@ -390,7 +400,13 @@ local roadThickness = 5
 local roadColour3 = buildingColour3
 local roadPositionY3 = math.random(roadPositionMin, roadPositionMax)
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour3, windowWidth, windowHeight, windowColour3a, windowColour3b, chosenFeature, roadPositionY3, roadThickness, roadColour3)
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour3, windowWidth, windowHeight, windowColour3a, windowColour3b, chosenFeature)
+
+local roadsBackgroundLayer3 = sprite:newLayer()
+roadsBackgroundLayer3.name = "roads, 3"
+local cel = sprite:newCel(roadsBackgroundLayer3, 1)
+
+genRoads(roadPositionY3, roadThickness, roadColour3)
 
 -- buildings 4
 local buildingsLayer4 = sprite:newLayer()
@@ -412,14 +428,20 @@ local windowColour4b = buildingColour1
 
 -- roads 4
 
-local roadPositionMin = canvasHeight * 0.75
-local roadPositionMax = canvasHeight * 0.85
+local roadPositionMin = canvasHeight * 0.65
+local roadPositionMax = canvasHeight * 0.70
 
 local roadThickness = 7
 local roadColour4 = buildingColour4
 local roadPositionY4 = math.random(roadPositionMin, roadPositionMax)
 
-genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour4, windowWidth, windowHeight, windowColour4a, windowColour4b, chosenFeature, roadPositionY3, roadThickness, roadColour4)
+genBuildings(buildingWidth, buildingHeight, buildingStartX, buildingColour4, windowWidth, windowHeight, windowColour4a, windowColour4b, chosenFeature)
+
+local roadsBackgroundLayer4 = sprite:newLayer()
+roadsBackgroundLayer4.name = "roads, 4"
+local cel = sprite:newCel(roadsBackgroundLayer4, 1)
+
+genRoads(roadPositionY4, roadThickness, roadColour4)
 
 -- water layer
 local waterLayer = sprite:newLayer()
@@ -443,8 +465,8 @@ app.useTool {
   color = baseColour,
   brush = brush1,
   points = {
-    Point(0, canvasHeight * 0.76),
-    Point(canvasWidth, canvasHeight * 0.76)
+    Point(0, canvasHeight * 0.75),
+    Point(canvasWidth, canvasHeight * 0.75)
   },
   cel = cel,
   layer = waterLayer
