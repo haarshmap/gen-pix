@@ -175,6 +175,51 @@ function genRoads(roadPositionY, roadThickness, roadColour)
       },
     }
 
+
+    local railingChance = math.random(0, 1)
+    if railingChance > 0 then
+
+        -- Draw railing/barrier
+        app.useTool {
+            tool = "line",
+            color = roadColour,
+            brush = brush1,
+            points = {
+                Point(0, roadPositionY - roadThickness/2),
+                Point(canvasWidth, roadPositionY - roadThickness/2)
+            },
+            cel = cel,
+            layer = layer
+        }
+
+        local numberOfPoles = canvasWidth/2
+        local poleWidth = 1
+        local poleInterval = 2
+
+        local poleStart = math.random(-10, 10)
+
+        -- Loop to draw railing poles
+        local i
+        for i = 0, numberOfPoles, 1 do
+
+            local polePosition = poleStart + i * poleInterval + (i * poleWidth)
+
+            -- Draw struts
+            app.useTool {
+                tool = "filled_rectangle",
+                color = roadColour,
+                brush = brush1,
+                points = {
+                    Point(polePosition, roadPositionY - roadThickness/2),
+                    Point(polePosition + poleWidth, roadPositionY)
+                },
+                cel = cel,
+                layer = layer
+            }
+        end
+    end
+
+
     -- adding street lamps
     local numberOfLamps = canvasWidth/4
     local lampWidth = 1
