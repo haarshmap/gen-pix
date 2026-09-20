@@ -1,4 +1,4 @@
-local canvasWidth = 200
+local canvasWidth = math.random(250, 300)
 local canvasHeight = 300
 
 sprite = Sprite(canvasWidth, canvasHeight)
@@ -498,7 +498,7 @@ app.useTool {
   color = buildingColour4,
   brush = brush1,
   points = {
-    Point(0, canvasHeight * 0.75),
+    Point(0, canvasHeight * 0.74),
     Point(canvasWidth, canvasHeight)
   },
   cel = cel,
@@ -510,9 +510,44 @@ app.useTool {
   color = baseColour,
   brush = brush1,
   points = {
-    Point(0, canvasHeight * 0.75),
-    Point(canvasWidth, canvasHeight * 0.75)
+    Point(0, canvasHeight * 0.74),
+    Point(canvasWidth, canvasHeight * 0.74)
   },
   cel = cel,
   layer = waterLayer
 }
+
+app.command.FlattenLayers{}
+
+local flattenedLayer = app.activeLayer
+app.range.layers = {flattenedLayer}
+app.command.Copy{}
+app.command.Paste{}
+
+local reflectionLayer = app.activeLayer
+reflectionLayer.name = "reflection"
+reflectionLayer.opacity = 155
+reflectionLayer.blendMode = BlendMode.SCREEN
+
+local oldFrame = app.activeFrame
+app.activeLayer = reflectionLayer
+
+for _,cel in ipairs(reflectionLayer.cels) do
+
+  app.activeFrame = cel.frame
+  app.command.Flip{ target="mask", orientation="vertical" }
+  cel.position = Point(cel.position.x, cel.position.y + (canvasHeight * 0.50) + 1)
+  app.useTool {
+    tool = "rectangular_marquee",
+    brush = brush1,
+    points = {
+      Point(0, canvasHeight * 0.75),
+      Point(canvasWidth, (0))
+    },
+    cel = cel,
+    layer = reflectionLayer
+  }
+
+  app.command.Cut{}
+
+end
