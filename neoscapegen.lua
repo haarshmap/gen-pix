@@ -175,51 +175,51 @@ function genRoads(roadPositionY, roadThickness, roadColour)
       },
     }
 
+    -- adding some rails
 
-    local railingChance = math.random(0, 1)
-    if railingChance > 0 then
+  local railingChance = math.random(0, 1)
 
-        -- Draw railing/barrier
-        app.useTool {
-            tool = "line",
-            color = roadColour,
-            brush = brush1,
-            points = {
-                Point(0, roadPositionY - roadThickness/2),
-                Point(canvasWidth, roadPositionY - roadThickness/2)
-            },
-            cel = cel,
-            layer = layer
-        }
+  if railingChance > 0 then
 
-        local numberOfPoles = canvasWidth/2
-        local poleWidth = 1
-        local poleInterval = 2
+  -- Draw railing/barrier
+  app.useTool {
+    tool = "line",
+    color = roadColour,
+    brush = brush1,
+    points = {
+      Point(0, roadPositionY - roadThickness/2),
+      Point(canvasWidth, roadPositionY - roadThickness/2)
+    },
+    cel = cel,
+    layer = layer
+  }
 
-        local poleStart = math.random(-10, 10)
+  local numberOfPoles = canvasWidth/2
+  local poleWidth = 1
+  local poleInterval = 2
+  local poleStart = math.random(-10, 10)
 
-        -- Loop to draw railing poles
-        local i
-        for i = 0, numberOfPoles, 1 do
+  -- Loop to draw railing poles
+  local i
+  for i = 0, numberOfPoles, 1 do
 
-            local polePosition = poleStart + i * poleInterval + (i * poleWidth)
+  local polePosition = poleStart + i * poleInterval + (i * poleWidth)
 
-            -- Draw struts
-            app.useTool {
-                tool = "filled_rectangle",
-                color = roadColour,
-                brush = brush1,
-                points = {
-                    Point(polePosition, roadPositionY - roadThickness/2),
-                    Point(polePosition + poleWidth, roadPositionY)
-                },
-                cel = cel,
-                layer = layer
-            }
-        end
-    end
+    -- Draw struts
+    app.useTool {
+      tool = "filled_rectangle",
+      color = roadColour,
+      brush = brush1,
+      points = {
+        Point(polePosition, roadPositionY - roadThickness/2),
+        Point(polePosition + poleWidth, roadPositionY)
+      },
+      cel = cel,
+      layer = layer
+    }
 
-
+  end
+end
     -- adding street lamps
     local numberOfLamps = canvasWidth/4
     local lampWidth = 1
@@ -561,38 +561,32 @@ app.useTool {
   cel = cel,
   layer = waterLayer
 }
+local home = os.getenv("HOME")
+local downloads = home .. "/Downloads"
 
-app.command.FlattenLayers{}
+-- Generate a unique filename
+local filename
 
-local flattenedLayer = app.activeLayer
-app.range.layers = {flattenedLayer}
-app.command.Copy{}
-app.command.Paste{}
+repeat
+    local timestamp = os.date("%d%m%y_%H%M%S")
+    local randomNumber = math.random(1000, 9999)
 
-local reflectionLayer = app.activeLayer
-reflectionLayer.name = "reflection"
-reflectionLayer.opacity = 155
-reflectionLayer.blendMode = BlendMode.SCREEN
+    filename = downloads .. "/" .. timestamp .. "_" .. randomNumber .. ".jpg"
 
-local oldFrame = app.activeFrame
-app.activeLayer = reflectionLayer
+    local file = io.open(filename, "r")
 
-for _,cel in ipairs(reflectionLayer.cels) do
+    if file then
+        file:close()
+    else
+        break
+    end
+until false
 
-  app.activeFrame = cel.frame
-  app.command.Flip{ target="mask", orientation="vertical" }
-  cel.position = Point(cel.position.x, cel.position.y + (canvasHeight * 0.50) + 1)
-  app.useTool {
-    tool = "rectangular_marquee",
-    brush = brush1,
-    points = {
-      Point(0, canvasHeight * 0.75),
-      Point(canvasWidth, (0))
-    },
-    cel = cel,
-    layer = reflectionLayer
-  }
+-- Export current sprite as JPG
+app.command.SaveFileCopyAs {
+    ui = false,
+    filename = filename,
+    filenameFormat = "jpg"
+}
 
-  app.command.Cut{}
-
-end
+app.exit()
