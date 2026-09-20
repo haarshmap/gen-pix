@@ -20,4 +20,6 @@ can be used to make some backgrounds for arts in case you are lazy like me
 
 ![img](https://i.postimg.cc/TwybX88P/200926-182635-9431.jpg)
 ![img](https://i.ibb.co/LXhbvKV4/200926-182541.jpg)
-![img](https://i.ibb.co/ZpCZMytH/200926-182635-9431.jpg)
+![img](https://i.ibb.co/nNpnKr4S/200926-182626-4476.jpg)
+![img](https://i.ibb.co/JWnpSD0Y/200926-182747.jpg)
+
