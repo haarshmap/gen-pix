@@ -561,32 +561,13 @@ app.useTool {
   cel = cel,
   layer = waterLayer
 }
+
 local home = os.getenv("HOME")
-local downloads = home .. "/Downloads"
+local filename = home .. "/Downloads/city_" .. os.date("%Y%m%d_%H%M%S") .. ".png"
 
--- Generate a unique filename
-local filename
-
-repeat
-    local timestamp = os.date("%d%m%y_%H%M%S")
-    local randomNumber = math.random(1000, 9999)
-
-    filename = downloads .. "/" .. timestamp .. "_" .. randomNumber .. ".jpg"
-
-    local file = io.open(filename, "r")
-
-    if file then
-        file:close()
-    else
-        break
-    end
-until false
-
--- Export current sprite as JPG
-app.command.SaveFileCopyAs {
-    ui = false,
-    filename = filename,
-    filenameFormat = "jpg"
-}
-
-app.exit()
+local x = sprite:saveCopyAs(filename)
+if x then
+    app.tip("Saved: " .. filename)
+else
+    app.tip("Failed to save.")
+end
