@@ -1,7 +1,7 @@
 
-# gen-pix
+## neoscapegen
 
-An aseprite plugin that basically generates a scenery and saves it as .jpg
+An aseprite plugin that basically generates a scenery and saves it as .png
 
 can be used to make some backgrounds for arts in case you are lazy like me
 
@@ -14,7 +14,7 @@ can be used to make some backgrounds for arts in case you are lazy like me
 
 ![img](https://i.postimg.cc/jSsJSn00/Screenshot-from-2026-09-20-18-37-06.png)
 
-    3. Click save and choose where to save and the image is saved as .jpg in your desired folder
+    3. Click save and choose where to save and the image is saved as .png in your desired folder
 
 ### Some example generations
 
