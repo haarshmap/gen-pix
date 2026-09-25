@@ -1,4 +1,4 @@
-local canvasWidth = math.random(250, 300)
+local canvasWidth = 300
 local canvasHeight = 300
 
 local sprite
@@ -9,6 +9,8 @@ if app.activeSprite == nil then
 
 else
     sprite = app.activeSprite
+    canvasWidth = sprite.width 
+    canvasHeight = sprite.height
 end
 
 app.refresh()
