@@ -19,7 +19,16 @@ app.refresh()
 local baseHue = math.random(360)
 local baseSat = math.random(15, 40) / 100
 local baseVal = math.random(81, 100) / 100
-local baseColour = Color{ h=baseHue, s=baseSat, v=baseVal, a=255 }
+local pick = Dialog{ title="Base colour" }
+ :color{ id="c", color=Color{h=baseHue, s=baseSat, v=baseVal, a=255} }
+ :button{ text="Generate" }
+ :show().data.c
+
+if not pick then return end
+baseHue = pick.hsvHue
+baseSat = pick.hsvSaturation
+baseVal = pick.hsvValue
+local baseColour = pick
 
 -- creating a new layer and a cell
 local skyLayer = sprite:newLayer()
@@ -420,9 +429,6 @@ local windowColour1b = baseColour
 windowWidthCurrent = math.random(windowWidth - 1, windowWidth + 1)
 windowHeightCurrent = math.random(windowHeight - 1, windowHeight + 1)
 
-local windowsInRow = (buildingWidth - 2) / windowWidth
-local windowsInColumn = (buildingHeight - 2) / windowHeight
-
 -- roads 1
 local roadPositionMin = canvasHeight * 0.40
 local roadPositionMax = canvasHeight * 0.45
@@ -547,26 +553,21 @@ local waterLayer = sprite:newLayer()
 waterLayer.name = "water"
 local cel = sprite:newCel(waterLayer, 1)
 
-app.useTool {
-  tool = "filled_rectangle",
-  color = buildingColour4,
-  brush = brush1,
-  points = {
-    Point(0, canvasHeight * 0.74),
-    Point(canvasWidth, canvasHeight)
-  },
-  cel = cel,
-  layer = waterLayer
-}
+local waterY = math.floor(canvasHeight * 0.74)
+local waterH = canvasHeight - waterY
 
-app.useTool {
-  tool = "line",
-  color = baseColour,
-  brush = brush1,
-  points = {
-    Point(0, canvasHeight * 0.74),
-    Point(canvasWidth, canvasHeight * 0.74)
-  },
-  cel = cel,
-  layer = waterLayer
-}
+local flat    = Image(sprite)
+local band    = Image(flat, Rectangle(0, waterY - waterH, canvasWidth, waterH))
+band:flip(FlipType.VERTICAL)
+cel.image:drawImage(band, Point(0, waterY),80 , BlendMode.SCREEN)
+
+local row = 2
+for y = 0, band.height - row, row do
+ local strip = Image(band, Rectangle(0, y, band.width, row))
+ cel.image:drawImage(strip, Point(math.random(-1, 1), waterY + y), 80, BlendMode.SCREEN)
+end
+
+local darkH = canvasHeight - waterY
+local darkOverlay = Image(canvasWidth, darkH, sprite.colorMode)
+darkOverlay:clear(Color{ gray = 0, a = 255 }) 
+cel.image:drawImage(darkOverlay, Point(0, waterY), 120, BlendMode.NORMAL)
