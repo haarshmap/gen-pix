@@ -1,8 +1,15 @@
 local canvasWidth = math.random(250, 300)
 local canvasHeight = 300
 
-sprite = Sprite(canvasWidth, canvasHeight)
-app.activeSprite = sprite
+local sprite
+
+if app.activeSprite == nil then
+    sprite = Sprite(canvasWidth, canvasHeight)
+    app.activeSprite = sprite
+
+else
+    sprite = app.activeSprite
+end
 
 app.refresh()
 
@@ -561,13 +568,3 @@ app.useTool {
   cel = cel,
   layer = waterLayer
 }
-
-local home = os.getenv("HOME")
-local filename = home .. "/Downloads/city_" .. os.date("%Y%m%d_%H%M%S") .. ".png"
-
-local x = sprite:saveCopyAs(filename)
-if x then
-    app.tip("Saved: " .. filename)
-else
-    app.tip("Failed to save.")
-end
